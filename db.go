@@ -2,12 +2,14 @@ package dbx
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
-	"scorredoira/amura"
 	"sync"
 
 	"github.com/scorredoira/goql"
 )
+
+var ErrReadOnly = errors.New("Error 1299. Can't write changes in Read-Only mode")
 
 type DB struct {
 	*sql.DB
@@ -226,7 +228,7 @@ func (db *DB) ToSql(q goql.Query, params []interface{}) (string, []interface{}, 
 
 func (db *DB) ExecRaw(query string, args ...interface{}) (sql.Result, error) {
 	if db.ReadOnly {
-		return nil, amura.NewPublicError(fmt.Sprintf("Error 1299. Can't write changes in Read-Only mode"), true)
+		return nil, ErrReadOnly
 	}
 
 	q := db.queryable()

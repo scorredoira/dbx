@@ -3,7 +3,6 @@ package dbx
 import (
 	"database/sql"
 	"fmt"
-	"scorredoira/amura"
 
 	"github.com/scorredoira/goql"
 )
@@ -300,7 +299,7 @@ func (db *DB) QueryValueEx(query *goql.SelectQuery) (interface{}, error) {
 
 func (db *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 	if db.ReadOnly {
-		return nil, amura.NewPublicError(fmt.Sprintf("Error 1299. Can't write changes in Read-Only mode"), true)
+		return nil, ErrReadOnly
 	}
 
 	q, err := goql.ParseQuery(query)
@@ -313,7 +312,7 @@ func (db *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 
 func (db *DB) ExecEx(q goql.Query, args ...interface{}) (sql.Result, error) {
 	if db.ReadOnly {
-		return nil, amura.NewPublicError(fmt.Sprintf("Error 1299. Can't write changes in Read-Only mode"), true)
+		return nil, ErrReadOnly
 	}
 
 	s, params, err := db.ToSql(q, args)
