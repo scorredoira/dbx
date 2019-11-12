@@ -18,7 +18,8 @@ type DB struct {
 	Database string
 
 	Namespace         string
-	NamespaceWriteAll bool
+	WriteAnyNamespace bool
+	OpenAnyDatabase   bool
 	ReadOnly          bool
 
 	mut      *sync.Mutex
@@ -60,7 +61,8 @@ func (db *DB) Open(database string) *DB {
 		DSN:               db.DSN,
 		Database:          database,
 		Namespace:         db.Namespace,
-		NamespaceWriteAll: db.NamespaceWriteAll,
+		WriteAnyNamespace: db.WriteAnyNamespace,
+		OpenAnyDatabase:   db.OpenAnyDatabase,
 		ReadOnly:          db.ReadOnly,
 		DB:                db.DB,
 		mut:               &sync.Mutex{},
@@ -74,7 +76,8 @@ func (db *DB) Clone() *DB {
 		DSN:               db.DSN,
 		Database:          db.Database,
 		Namespace:         db.Namespace,
-		NamespaceWriteAll: db.NamespaceWriteAll,
+		WriteAnyNamespace: db.WriteAnyNamespace,
+		OpenAnyDatabase:   db.OpenAnyDatabase,
 		ReadOnly:          db.ReadOnly,
 		DB:                db.DB,
 		mut:               &sync.Mutex{},
